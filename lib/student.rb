@@ -31,10 +31,15 @@ class Student
       INSERT INTO students (name, grade) 
       VALUES (?, ?)
     SQL
+
+    sql2 = <<-SQL
+      SELECT last_insert_rowid() FROM students
+    SQL
  
     DB[:conn].execute(sql, self.name, self.grade)
-    #last_insert_rowid returns rowid of last row insert
-    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
+    
+    @id = DB[:conn].execute(sql2)[0][0] #assigning value to instance id
+    #last_insert_rowid returns rowid of last row insert within 2 arrays
   end
 
   def self.create(name:, grade:)
